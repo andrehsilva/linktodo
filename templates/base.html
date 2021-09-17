@@ -1,0 +1,345 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sacada Web</title>
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/css/datatables.min.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'assets/vendors/iconly/bold.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendors/bootstrap-icons/bootstrap-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/app.css' %}">
+    <link rel="shortcut icon" href="{% static 'assets/images/favicon.svg' %}" type="image/x-icon' ">
+
+    <style>
+        body {
+            background-color: #FAFAFA;
+            font-family: 'Nunito', sans-serif;
+            padding-top: 50px;
+        }
+
+
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+            {
+            font-family: 'Raleway', sans-serif;
+        }
+
+        a,
+        p {
+            color: #4b5156
+        }
+
+        a {
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 550px;
+            margin: auto;
+            background-color: #fff;
+            -webkit-box-shadow: 2px 2px 13px -4px rgba(0, 0, 0, 0.21);
+            box-shadow: 2px 2px 13px -4px rgba(0, 0, 0, 0.21);
+            padding: 10px;
+        }
+
+        input {
+            outline: none;
+            border: none;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+            background: linear-gradient(90deg, #515dab 0%, #0b63bd 43%, #7488ea 100%);
+        }
+
+        .header-bar a {
+            color: rgb(247, 247, 247);
+            text-decoration: none;
+        }
+
+        .task-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fff;
+            border-top: 1px solid #dfe4ea;
+            overflow: hidden;
+        }
+
+        .task-title {
+            display: flex;
+            padding: 20px;
+        }
+
+        .task-title a {
+            text-decoration: none;
+            color: #4b5156;
+            margin-left: 10px;
+        }
+
+        .task-complete-icon {
+            height: 20px;
+            width: 20px;
+            background-color: rgb(105, 192, 105);
+            border-radius: 50%;
+        }
+
+        .task-incomplete-icon {
+            height: 20px;
+            width: 20px;
+            background-color: rgb(218, 218, 218);
+            border-radius: 50%;
+        }
+
+        .delete-link {
+            text-decoration: none;
+            font-weight: 900;
+            color: #cf4949;
+            font-size: 22px;
+            line-height: 0;
+            padding: 20px 10px;
+        }
+
+        /*Handle Classes*/
+
+        .handle {
+            display: inline-block;
+            padding: 20px 16px;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .handle:after,
+        .handle:before {
+            display: block;
+            content: "";
+        }
+
+        .handle:active,
+        .handle:active:before,
+        .handle:active:after {
+            cursor: grabbing;
+        }
+
+        .dropArea {
+            background-color: #f1f2f6;
+            color: black;
+            border: #ced6e0 1px solid;
+        }
+
+        .selectedTask {
+            opacity: 0.6;
+        }
+
+
+        #add-link {
+            color: #7472dc;
+            text-decoration: none;
+            font-size: 42px;
+            text-shadow: 1px 1px #81413b;
+        }
+
+        #search-add-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @media screen and (max-width:320px) {
+            #search-add-wrapper {
+                padding: 10px;
+            }
+        }
+
+        input[type=text],
+        input[type=password],
+        textarea {
+            border: 1px solid #757575;
+            border-radius: 5px;
+            padding: 10px;
+            width: 90%;
+        }
+
+        label {
+            padding-top: 10px !important;
+            display: block;
+        }
+
+        ::placeholder {
+            font-weight: 300;
+            opacity: 0.5;
+        }
+
+        .button {
+            border: 1px solid #757575;
+            background-color: #FFF;
+            color: #EB796F;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="sidebar" class="active">
+            <div class="sidebar-wrapper active">
+    <div class="sidebar-header">
+        <div class="d-flex justify-content-between">
+            <div class="logo">
+                <a href="{% url 'index' %}">Sacada Web</a>
+            <div class="toggler">
+                <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-menu">
+        <ul class="menu">
+            <li class="sidebar-title">Menu</li>
+
+
+
+            
+
+            {% if request.path == '/todo/' %}
+               <li class="sidebar-item active ">
+            {% else %}
+            <li class="sidebar-item ">
+            {% endif %} <a href="{% url 'tasks' %}" class='sidebar-link'>
+                    <i class="bi bi-list-task"></i>
+                    <span>Tarefas</span>
+                </a>
+            </li>
+
+            {% if request.path == '/links/' %}
+               <li class="sidebar-item active ">
+            {% else %}
+            <li class="sidebar-item ">
+            {% endif %}
+                <a href="{% url 'index' %}" class='sidebar-link'>
+                    <i class="bi bi-link-45deg"></i>
+                    <span>Links</span>
+                </a>
+            </li>
+
+
+            {% if request.path == '/social/' %}
+               <li class="sidebar-item active ">
+            {% else %}
+            <li class="sidebar-item ">
+            {% endif %}
+                <a href="{% url 'feed' %}" class='sidebar-link'>
+                    <i class="bi bi-telegram"></i>
+                    <span>Feed</span>
+                </a>
+            </li>
+
+
+
+            <li class="sidebar-item ">
+
+                <a href="{% url 'logout' %}" class='sidebar-link'>
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Sair</span>
+                </a>
+            </li>
+
+            
+
+        </ul>
+    </div>
+    <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+</div>
+        </div>
+
+
+        <div id="main">
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+            {% block 'page-heading' %}
+<div class="page-heading">
+    <h3>Profile Statistics</h3>
+</div>
+<div class="page-content">
+    <section class="row">
+        <div class="col-12 col-lg-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Profile Visit</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="chart-profile-visit"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+            <footer>
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2021 &copy; AHRS</p>
+                    </div>
+                    <div class="float-end">
+                        <p>Criado com <span class="text-danger"><i class="bi bi-heart"></i></span> por
+                            <a target="_blank" href="http://sacadaweb.com.br">Sacadaweb</a></p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+
+    </div>
+    <script src="{% static 'assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/vendors/apexcharts/apexcharts.js' %}"></script>
+    <script src="{% static 'assets/js/pages/dashboard.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+
+
+    <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/js/datatables.min.js' %}"></script>
+
+{% block 'scripts' %}
+
+    {% endblock %}
+</body>
+
+</html>

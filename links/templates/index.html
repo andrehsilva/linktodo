@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% if request.user.is_authenticated %}
+<a href="{% url 'logout' %}">logout</a>
+{% else %}
+<a href="{% url 'login' %}">login</a>
+{% endif %}
+
+{% block 'page-heading' %}
+
+<div class="page-heading">
+    <h3>Links do Binóculo</h3>
+</div>
+<div class="page-content">
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                Listagem de escolas
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                <table class="table table-striped" id="table_id">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Escola</th>
+                            <th>URL</th>
+                            <th>Tenant_ID</th>
+                            <th>School_ID</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for link in links %}
+                              <tr>
+
+                                <td>{{link.id}}</td>
+                                <td>{{link.escola}}</td>
+                                <td>{{link.url}}</td>
+                                <td>{{link.tenant_id}}</td>
+                                <td>{{link.school_id}}</td>
+                                <td><a href='{{link.url}}' target='_blank' class='btn btn-info'>Acessar</a></td>
+
+                              </tr>
+                              {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>
+
+
+{% endblock %}
+
+
+{% block 'scripts' %}
+
+<script>
+
+  $(document).ready(function(){
+      $("#table_id").DataTable({
+        responsive: true,
+        // "bSort": false,
+        "aaSorting": [],
+        "pageLength": 50,
+        "language": {
+            "decimal": "",
+            "emptyTable": "Sem dados disponíveis",
+            "info": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            "infoEmpty": "Mostrando de 0 até 0 de 0 registros",
+            "infoFiltered": "(filtrado de _MAX_ registos no total)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ registros",
+            "loadingRecords": "A carregar dados...",
+            "processing": "A processar...",
+            "search": "Procurar:",
+            "zeroRecords": "Não foram encontrados resultados",
+            "paginate": {
+                "first": "Primeiro",
+                "last": "Último",
+                "next": "Seguinte",
+                "previous": "Anterior"
+            },
+            "aria": {
+                "sortAscending": ": ordem crescente",
+                "sortDescending": ": ordem decrescente"
+            }
+        }
+    });
+  });
+
+
+</script>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+

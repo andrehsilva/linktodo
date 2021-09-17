@@ -1,0 +1,18 @@
+{% extends 'todo/main.html' %}
+{% block 'content' %}
+
+<div class="header-bar">
+    <a href="{% url 'tasks' %}">&#8592; Voltar</a>
+</div>
+
+<div class="card-body">
+    <form method="POST">
+        {% csrf_token %}
+        <p>Você deseja realmente excluir essa tarefa? <b>"{{ task }}"</b></p>
+        <input class="button" type="submit" value="Excluir" />
+    </form>
+</div>
+
+
+
+{% endblock %}
